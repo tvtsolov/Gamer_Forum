@@ -1,0 +1,581 @@
+﻿
+html {
+   
+}
+
+footer {
+
+}
+
+.qarstb {
+    flex-grow: 0 !important;
+    flex-shrink: 1 !important;
+}
+
+.title-banner {
+    width: 100%;
+    height: auto;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.body-general {
+    margin: 60px auto 0px auto;
+    width: 80%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #27292b !important;
+    background-image: url("https://i.ibb.co/JzGMQmp/bg-custom-transparent.png");
+    background-repeat: repeat;
+    background-size: 15%;
+    padding-top: 2px;
+    height: 100%;
+}
+
+.list-group-item-dark-1 {
+    --bs-list-group-color: var(--bs-dark-text-emphasis);
+    --bs-list-group-bg: var(--bs-dark-bg-subtle);
+    --bs-list-group-border-color: var(--bs-dark-border-subtle);
+    --bs-list-group-action-hover-color: var(--bs-emphasis-color);
+    --bs-list-group-action-hover-bg: var(--bs-dark-border-subtle);
+    --bs-list-group-action-active-color: var(--bs-emphasis-color);
+    --bs-list-group-action-active-bg: var(--bs-dark-border-subtle);
+    --bs-list-group-active-color: var(--bs-dark-bg-subtle);
+    --bs-list-group-active-bg: var(--bs-dark-text-emphasis);
+    --bs-list-group-active-border-color: var(--bs-dark-text-emphasis);
+}
+
+.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
+    background-color: #1b1b1b !important;
+}
+
+.body-thread {
+    margin-top: 100px;
+}
+
+
+
+
+.nav-bar_offset {
+
+}
+
+.border-custom1 {
+    --bs-border-opacity: 1;
+    border-color: #b72f2f !important;
+}
+
+.fixed-top-2 {
+    margin-top: 40px;
+}
+
+.navbar-inner2 {
+    padding-left: 50px !important;
+    padding-right: 50px !important;
+    height: 40px !important;
+}
+
+.btn-sm2, .btn-group-sm2 > .btn {
+    --bs-btn-padding-y: 0.25rem;
+    --bs-btn-padding-x: 0.5rem;
+    --bs-btn-font-size: 0.875rem;
+    --bs-btn-border-radius: 15px !important;
+}
+
+.btn-custom1 {
+    --bs-btn-color: #fefefe;
+    --bs-btn-bg: #840d0d;
+    --bs-btn-border-color: none;
+    --bs-btn-hover-color: #bcb7b7;
+    --bs-btn-hover-bg: #8a2424;
+    --bs-btn-hover-border-color: #8a2424;
+    --bs-btn-focus-shadow-rgb: 225, 83, 97;
+    --bs-btn-active-color: #414141;
+    --bs-btn-active-bg: #2f0d0d;
+    --bs-btn-active-border-color: #2f0d0d;
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #fff;
+    --bs-btn-disabled-bg: #dc3545;
+    --bs-btn-disabled-border-color: #dc3545;
+}
+
+
+.btn-custom2 {
+    --bs-btn-color: #fefefe;
+    --bs-btn-bg: #7733bc;
+    --bs-btn-border-color: none;
+    --bs-btn-hover-color: #bcb7b7;
+    --bs-btn-hover-bg: #59268d;
+    --bs-btn-hover-border-color: #8a2424;
+    --bs-btn-focus-shadow-rgb: 225, 83, 97;
+    --bs-btn-active-color: #414141;
+    --bs-btn-active-bg: #2b0d4a;
+    --bs-btn-active-border-color: #2f0d0d;
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #fff;
+    --bs-btn-disabled-bg: #dc3545;
+    --bs-btn-disabled-border-color: #dc3545;
+}
+
+.btn-custom3 {
+    --bs-btn-color: #fefefe;
+    --bs-btn-bg: #098256;
+    --bs-btn-border-color: none;
+    --bs-btn-hover-color: #bcb7b7;
+    --bs-btn-hover-bg: #0a593c;
+    --bs-btn-hover-border-color: #8a2424;
+    --bs-btn-focus-shadow-rgb: 225, 83, 97;
+    --bs-btn-active-color: #414141;
+    --bs-btn-active-bg: #093625;
+    --bs-btn-active-border-color: #2f0d0d;
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #fff;
+    --bs-btn-disabled-bg: #dc3545;
+    --bs-btn-disabled-border-color: #dc3545;
+}
+
+
+.btn-custom4 {
+    --bs-btn-color: #fefefe;
+    --bs-btn-bg: none;
+    --bs-btn-border-color: none;
+    --bs-btn-hover-color: #bcb7b7;
+    --bs-btn-hover-bg: none;
+    --bs-btn-hover-border-color: none;
+    --bs-btn-focus-shadow-rgb: 225, 83, 97;
+    --bs-btn-active-color: #414141;
+    --bs-btn-active-bg: none;
+    --bs-btn-active-border-color: none;
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #fff;
+    --bs-btn-disabled-bg: #dc3545;
+    --bs-btn-disabled-border-color: #dc3545;
+
+}
+
+
+.btn-custom5 {
+    --bs-btn-color: #fefefe;
+    --bs-btn-bg: #bc2f2f;
+    --bs-btn-border-color: none;
+    --bs-btn-hover-color: rgba(122, 112, 117, 0.8);
+    --bs-btn-hover-bg: rgba(122, 112, 117, 0.8);
+    --bs-btn-hover-border-color: #8a2424;
+    --bs-btn-focus-shadow-rgb: 225, 83, 97;
+    --bs-btn-active-color: #414141;
+    --bs-btn-active-bg: #2f0d0d;
+    --bs-btn-active-border-color: #2f0d0d;
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #fff;
+    --bs-btn-disabled-bg: #dc3545;
+    --bs-btn-disabled-border-color: #dc3545;
+    background-color: transparent;
+    --bs-btn-border-radius: 13px;
+    --bs-btn-padding-x: 0.75rem !important;
+    --bs-btn-padding-y: 0.0rem !important;
+}
+
+.btn-custom6 {
+    --bs-btn-color: #fefefe;
+    --bs-btn-bg: #000000;
+    --bs-btn-border-color: none;
+    --bs-btn-hover-color: #bcb7b7;
+    --bs-btn-hover-bg: #000000;
+    --bs-btn-hover-border-color: #8a2424;
+    --bs-btn-focus-shadow-rgb: 225, 83, 97;
+    --bs-btn-active-color: #414141;
+    --bs-btn-active-bg: #000000;
+    --bs-btn-active-border-color: #2f0d0d;
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #fff;
+    --bs-btn-disabled-bg: #dc3545;
+    --bs-btn-disabled-border-color: #dc3545;
+}
+
+.btn-custom7 {
+    --bs-btn-color: #fefefe;
+    --bs-btn-bg: #941818;
+    --bs-btn-border-color: #840d0d;
+    --bs-btn-hover-color: #bcb7b7;
+    --bs-btn-hover-bg: #8a2424;
+    --bs-btn-hover-border-color: #8a2424;
+    --bs-btn-focus-shadow-rgb: 225, 83, 97;
+    --bs-btn-active-color: #414141;
+    --bs-btn-active-bg: #2f0d0d;
+    --bs-btn-active-border-color: #2f0d0d;
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #fff;
+    --bs-btn-disabled-bg: #dc3545;
+    --bs-btn-disabled-border-color: #dc3545;
+}
+
+.clear-link {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.form-control-custom {
+    display: block;
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #ffffff;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: #202223;
+    background-clip: padding-box;
+    border: 0px;
+    border-radius: var(--bs-border-radius);
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.card-size-custom {
+    width: 23% !important;
+}
+
+.card-size-custom p {
+}
+
+.table-custom {
+    float: left !important;
+    width: 75% !important;
+    margin-right: 10px;
+    display: inline !important;
+}
+
+.bg-black-1 {
+    background-color: rgba(10, 10, 70, 0.7) !important;
+    
+}
+
+
+th {
+    background-color: rgba(10, 10, 44) !important;
+    vertical-align: top;
+}
+
+td {
+    background-color: rgba(10, 10, 70) !important;
+    vertical-align: top;
+    margin-bottom: 10px;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+}
+
+
+
+.small-b-margin {
+    margin-bottom: 3px !important;
+}
+
+.dropdown-menu-custom {
+    --bs-dropdown-color: #dee2e6;
+    --bs-dropdown-bg: #000000;
+    --bs-dropdown-border-color: #47494b;
+    --bs-dropdown-box-shadow:;
+    --bs-dropdown-link-color: #dee2e6;
+    --bs-dropdown-link-hover-color: #dee2e6;
+    --bs-dropdown-divider-bg: #262626;
+    --bs-dropdown-link-hover-bg: #1b1b1b;
+    --bs-dropdown-link-active-color: #ffffff;
+    --bs-dropdown-link-active-bg: #0d6efd;
+    --bs-dropdown-link-disabled-color: #adb5bd;
+    --bs-dropdown-header-color: #adb5bd;
+}
+
+.eight-percent {
+    font-size: small;
+    width:fit-content;
+}
+
+.ten-percent {
+    width: 10%;
+}
+
+.twenty-percent {
+    width: 20%;
+}
+
+.thread-home-size {
+    width: 1000px;
+}
+
+.container-thread-details {
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid #fff;
+}
+
+
+.box-thread-details--message {
+    flex: 1;
+    border: 1px solid #000;
+    padding: 12px;
+    padding-left: 14px;
+    padding-right: 14px;
+    position: relative;
+}
+
+.container-comment-details {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.box-thread-details--author {
+    flex: 0 1 150px;
+    border: 1px solid #fff;
+    padding: 10px;
+    text-align: center;
+}
+
+.box-thread-details--message--editing {
+    border: 1px solid #000;
+    padding: 10px;
+    text-align: justify;
+}
+
+.text-with-big-bottom {
+    padding-bottom: 5rem !important;
+}
+
+.avatar {
+    width: 50px; /* Adjust the width as needed */
+    height: 50px; /* Adjust the height as needed */
+    border-radius: 50%; /* Optional: make it round if your avatars are square */
+    object-fit: cover; /* Optional: maintain aspect ratio and cover the container */
+}
+
+.avatar-home {
+    width: 20px; /* Adjust the width as needed */
+    height: 20px; /* Adjust the height as needed */
+    border-radius: 50%; /* Optional: make it round if your avatars are square */
+    object-fit: cover; /* Optional: maintain aspect ratio and cover the container */
+}
+
+.avatar-navbar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.btn-custom-bg-dark-prpl {
+    background: #733c90 !important;
+}
+
+.bottom-right-text {
+    position: absolute;
+    bottom: 10px;
+    right: 16px;
+}
+
+.bottom-left-text {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+}
+
+.font-size-small {
+    font-size: 14px;
+}
+
+.gray-text {
+    color: rgba(135, 135, 135, 0.8) !important;
+}
+
+.accordion-custom {
+    --bs-accordion-bg: #000000;
+    --bs-accordion-transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, border-radius 0.15s ease;
+    --bs-accordion-border-color: #282c2c;
+    --bs-accordion-border-width: var(--bs-border-width);
+    --bs-accordion-border-radius: var(--bs-border-radius);
+    --bs-accordion-inner-border-radius: calc(var(--bs-border-radius) - (var(--bs-border-width)));
+    --bs-accordion-btn-padding-x: 1.25rem;
+    --bs-accordion-btn-padding-y: 1rem;
+    --bs-accordion-btn-color: var(--bs-body-color);
+    --bs-accordion-btn-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23212529'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+    --bs-accordion-btn-icon-width: 1.25rem;
+    --bs-accordion-btn-icon-transform: rotate(-180deg);
+    --bs-accordion-btn-icon-transition: transform 0.2s ease-in-out;
+    --bs-accordion-btn-active-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23052c65'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+    --bs-accordion-btn-focus-border-color: #86b7fe;
+    --bs-accordion-btn-focus-box-shadow: none;
+    --bs-accordion-body-padding-x: 1.25rem;
+    --bs-accordion-body-padding-y: 1rem;
+    --bs-accordion-active-color: #fefefe;
+    --bs-accordion-color: #1e81b0;
+    --bs-accordion-btn-bg: #000000;
+    --bs-accordion-active-bg: #840d0d;
+}
+
+.pagination-custom-colors {
+    --bs-pagination-color: #d6d6d7;
+    --bs-pagination-bg: #000000;
+    --bs-pagination-border-color: #000000;
+    --bs-pagination-hover-color: #ffffff;
+    --bs-pagination-hover-bg: #202223;
+    --bs-pagination-hover-border-color: #000000;
+    --bs-pagination-focus-color: #ffffff;
+    --bs-pagination-focus-bg: #202223;
+    --bs-pagination-focus-box-shadow: 0 0 0 0.25rem rgba(172, 0, 0, 0.15);
+    --bs-pagination-active-color: #fff;
+    --bs-pagination-active-bg: #970f0f;
+    --bs-pagination-active-border-color: #000000;
+    --bs-pagination-disabled-color: #212325;
+    --bs-pagination-disabled-bg: #000000;
+    --bs-pagination-disabled-border-color: #000000;
+}
+
+
+.orange-star {
+    color: orange !important;
+}
+.white-star {
+    color: white !important;
+}
+.modal-header {
+    border: none;
+}
+
+.modal-title {
+    color: black !important;
+    
+}
+
+.centered-text {
+    text-align: center;
+}
+
+.modal-content{
+    width: auto !important;
+}
+
+.modal-footer {
+    border: none;
+}
+
+.gradient-rate-window {
+    background: rgb(78,99,255);
+    background: linear-gradient(180deg, rgba(78,99,255,1) 0%, rgba(32,27,198,1) 43%, rgba(27,133,252,1) 100%);
+}
+
+.modal-dialog-centered {
+    justify-content: center;
+}
+
+.modal {
+    
+}
+
+
+#font-size-popup {
+    font-size: 2.7rem !important;
+}
+
+
+/* use display:inline-flex to prevent whitespace issues. alternatively, you can put all the children of .rating-group on a single line */
+
+.rating-group {
+    display: inline-flex;
+    font-size: 0.7rem;
+}
+
+/* make hover effect work properly in IE */
+.rating__icon {
+    pointer-events: none;
+}
+
+/* hide radio inputs */
+.rating__input {
+    position: absolute !important;
+    left: -9999px !important;
+}
+
+/* set icon padding and size */
+.rating__label {
+    cursor: pointer;
+    /* if you change the left/right padding, update the margin-right property of .rating__label--half as well. */
+    padding: 0 0.1em;
+}
+
+/* add padding and positioning to half star labels */
+.rating__label--half {
+    padding-right: 0;
+    margin-right: -1.2em;
+    z-index: 2;
+}
+
+/* set default star color */
+.rating__icon--star {
+    color: orange;
+}
+
+/* set color of none icon when unchecked */
+.rating__icon--none {
+    color: #eee;
+}
+
+
+/*rating stars on click effects*/
+
+/* if none icon is checked, make it red */
+.rating__input--none:checked + .rating__label .rating__icon--none {
+    color: red;
+}
+
+/*if any input is checked, make its following siblings grey */
+.rating__input:checked ~ .rating__label .rating__icon--star {
+    color: #ddd;
+}
+
+
+
+/*rating stars hover effects*/
+
+/* make all stars orange on rating group hover */
+.rating-group:hover .rating__label .rating__icon--star,
+.rating-group:hover .rating__label--half .rating__icon--star {
+    color: orange;
+}
+
+/*make hovered input's following siblings grey on hover */
+.rating__input:hover ~ .rating__label .rating__icon--star,
+.rating__input:hover ~ .rating__label--half .rating__icon--star {
+    color: #ddd;
+}
+
+/*make none icon grey on rating group hover */
+.rating-group:hover .rating__input--none:not(:hover) + .rating__label .rating__icon--none {
+    color: #eee;
+}
+
+/*make none icon red on hover */
+.rating__input--none:hover + .rating__label .rating__icon--none {
+    color: red;
+}
+
+.list-group-item:hover {
+    background-color: #0a0a0a !important;
+}
+
+.td-colorfy {
+    background: #0a0a0a !important;
+    color: #e8e8da !important;
+}
+
+.th-colorfy {
+    background: #000000 !important;
+    color: #ffffff !important;
+}

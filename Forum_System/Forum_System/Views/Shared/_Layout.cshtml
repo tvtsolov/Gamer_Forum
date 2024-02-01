@@ -1,0 +1,131 @@
+﻿
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    var isLogged = Context.Session.Keys.Contains("CurrentUser");
+    var username = Context.Session.GetString("CurrentUser");
+    var adminStatus = Context.Session.GetString("AdminStatus");
+    var loggedId = Context.Session.GetString("CurrentID");
+
+    AvatarHelper avatarHelper = new AvatarHelper();
+    string avatarLocation = avatarHelper.GetAvatar(username);
+}
+
+
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title> @ViewData["Title"] </title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="~/css/site.css" />
+
+        <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="https://kit.fontawesome.com/c21727a50d.js" crossorigin="anonymous"></script>
+
+        <link rel="icon" type="image/x-icon" href="~/images/mushroom.png">
+
+
+    </head>
+
+
+    <body>
+
+        <header>
+
+        <nav class="navbar navbar-inner2 navbar-expand-lg fixed-top bg-black" data-bs-theme="dark">
+
+            <div class="container-fluid">
+
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                    <img src="~/images/mushroom.png" alt="Logo" width="30" height="30" class="d-inline-block align-text-top">
+                    Forum
+                </a>           
+                
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" asp-controller="Thread" asp-action="Index">Threads</a>
+                        </li>
+
+                        @if (isLogged)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" asp-controller="User" asp-action="Index">Users</a>
+                            </li>
+                        } 
+
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" asp-controller="Home" asp-action="About">About</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="/api/swagger">API</a>
+                        </li>
+
+                    </ul>
+
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+
+                    @{
+                        if (!isLogged)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" asp-controller="Auth" asp-action="Login">Sign in</a>
+                            </li>
+                            <li class="nav-item">
+                                    <a class="nav-link active" aria-current="page" asp-controller="Auth" asp-action="Register">Register</a>
+                             </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img class="avatar-navbar" src="~/images/avatars/@avatarLocation" alt="avatar" />
+                                    @username
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end bg-black">
+                                    <li><a class="dropdown-item" asp-controller="User" asp-action="Details" asp-route-id="@loggedId">Profile</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" asp-controller="Auth" asp-action="Logout">Sign out</a></li>
+                                </ul>
+                            </li>
+                        }
+                    }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        </header>
+
+        <div class="body-general">
+            @RenderBody()
+        </div>
+
+        <div class="qarstb"></div>
+
+        @* <footer class="text-light" style="color: #26282a; clear: both;">
+            <hr style="color:black; margin-top: 0px; margin-bottom: 0px;">
+
+            <div class="text-center" style="margin-bottom: 25px;">
+                <div class="text">
+                    <a asp-controller="Home" asp-action="Index" style="margin-left: 10px; margin-right: 10px; text-decoration: none; color: #fefefe;">© @DateTime.Now.Year Forum</a>
+                    <a asp-controller="Home" asp-action="About" style="margin-left: 10px; margin-right: 10px; text-decoration: none; color: #fefefe;">About</a>
+                    <a href="mailto:forum@example.com?subject = Feedback&body = Message" style="margin-left: 10px; margin-right: 10px; text-decoration: none; color: #fefefe;">Contact</a>
+                </div>
+            </div>
+            
+        </footer> *@
+    </body>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+</html>

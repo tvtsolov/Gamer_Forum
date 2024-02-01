@@ -1,0 +1,38 @@
+﻿@{
+    ViewData["Title"] = "Login";
+}
+
+@model LoginViewModel
+
+<div class="d-flex justify-content-center">
+    <div class="card bg-black text-light " style="width: 30rem;">
+        <div class="card-header">
+            <h3>Enter your credentials</h3>
+        </div>
+    
+
+        <form asp-controller="Auth" asp-action="Login" method="post">
+
+            <div class="card-body" style="padding-bottom: 1px; margin-bottom: 0px;">
+                <div class="mb-3">
+                    <input type="text" asp-for="Username" class="form-control-custom" placeholder="Username" />
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <input type="password" asp-for="Password" class="form-control-custom" placeholder="Password" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+            </div>
+
+            <hr />
+
+            <div class="card-footer text-end mb-3">
+                <input type="submit" value="Login" class="btn btn-custom3" />
+                <a asp-controller="Auth" asp-action="Register" class="btn btn-custom1">Register</a>
+            </div>
+
+        </form>
+    </div>
+</div>

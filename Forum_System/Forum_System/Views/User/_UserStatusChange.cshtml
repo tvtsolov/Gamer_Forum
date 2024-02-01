@@ -1,0 +1,21 @@
+﻿@model User
+
+<div class="d-flex justify-content-center">
+    <div class="card bg-black text-light " style="width: 25rem;">
+
+        <div class="card-header">
+            Are you sure you want to @ViewData["Action"].ToString().ToLower() user '<b>@Model.Username</b>'?
+        </div>
+
+        <div class="card-body text-end mb-3" style="padding-bottom: 1px; margin-bottom: 0px;">
+            <div class="d-flex justify-content-end">
+                <a asp-controller="User" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-custom4">Back</a>
+
+                <form asp-controller="User" asp-action="@ViewData["Action"]" method="post">
+                    <input type="submit" value="@ViewData["SubmitButton"]" class="btn btn-custom1" />
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

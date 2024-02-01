@@ -1,0 +1,161 @@
+﻿@{
+    ViewData["Title"] = "Details";
+    var adminStatus = Context.Session.GetString("AdminStatus");
+    var loggedId = Context.Session.GetString("CurrentID");
+
+    AvatarHelper avatarHelper = new AvatarHelper();
+    string avatarLocation = avatarHelper.GetAvatar(Model.Username);
+}
+
+@model User
+
+
+<div class="container d-flex justify-content-center">
+
+    <div class="card bg-black text-light" style="width: 25rem;">
+
+        <div class="d-flex p-3 align-items-center" style="padding-bottom: 0px !important; padding-top: 7px !important;">
+
+            <div class="image">
+                <img src="~/images/avatars/@avatarLocation" alt="Logo" class="rounded-circle" width="80px" height="80px" />
+            </div>
+
+            <div class="ml-3 w-100" style="padding-left: 12px;">
+
+                <div class="d-flex" style="justify-content: space-between !important; padding-bottom: 1px !important;">
+                    <h4 class="mb-0 mt-0"> @Model.Username</h4>
+
+                    @{
+                        if ((adminStatus == "True") || (int.Parse(loggedId) == Model.Id))
+                        {
+                            <div class="dropdown dropend text-light">
+                                <button class="btn btn-custom4 btn-sm text-end" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="padding-top: 0px !important;">
+                                    <h5>...</h5>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-custom">
+                                    @{
+                                        if (adminStatus == "False" || (int.Parse(loggedId) == Model.Id))
+                                        {
+                                            <li><a class="dropdown-item" asp-controller="User" asp-action="Edit" asp-route-id="@Model.Id">Edit profile</a></li>
+                                            <li><a class="dropdown-item" asp-controller="User" asp-action="ChangeAvatar">Change avatar</a></li>
+                                        }
+
+                                        if (adminStatus == "True")
+                                        {
+                                            if (Model.IsBlocked)
+                                            {
+                                                <li><a class="dropdown-item" asp-controller="User" asp-action="Unblock" asp-route-id="@Model.Id">Unblock</a></li>
+                                                <li><a class="dropdown-item" asp-controller="User" asp-action="Delete" asp-route-id="@Model.Id">Delete</a></li>
+                                            }
+                                            else
+                                            {
+                                                if (Model.IsAdmin)
+                                                {
+                                                    <li><a class="dropdown-item" asp-controller="User" asp-action="Demote" asp-route-id="@Model.Id">Demote</a></li>
+                                                }
+                                                else
+                                                {
+                                                    <li><a class="dropdown-item" asp-controller="User" asp-action="Promote" asp-route-id="@Model.Id">Promote</a></li>
+                                                    <li><a class="dropdown-item" asp-controller="User" asp-action="Block" asp-route-id="@Model.Id">Block</a></li>
+                                                    <li><a class="dropdown-item" asp-controller="User" asp-action="Delete" asp-route-id="@Model.Id">Delete</a></li>
+                                                }
+                                            }                               
+                                        }
+                                    }
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" asp-controller="User" asp-action="RemoveAvatar" asp-route-id="@Model.Id">Remove avatar</a></li>
+
+
+                                </ul>
+                            </div>
+                        }
+                    }
+                    
+
+                </div>
+                
+                <span>@Model.FirstName @Model.LastName</span>
+            </div>
+
+           
+
+        </div>
+
+        <div class="card-body" style="padding-left: 25px; padding-top: 0px !important; padding-bottom: 0px !important;">
+            <h6>ID number • @Model.Id</h6>
+            @{
+                if (adminStatus == "True" || (int.Parse(loggedId) == Model.Id))
+                {
+                    <h6>@Model.Email</h6>
+                }
+
+                if(Model.IsAdmin)
+                {
+                    <h6>Admin</h6>
+                    if (Model.PhoneNumber != null)
+                    {
+                        <h6>Phone number • @Model.PhoneNumber</h6>
+                    }
+                }
+                else
+                {
+                    <h6>Member
+                        @{
+                            if(Model.IsBlocked)
+                            {
+                                <text>• Blocked</text>
+                            }
+                        }
+                    </h6>
+                }
+            }
+
+        </div>
+
+        <hr style="padding-bottom: 0px !important; padding-top: 0px !important"/>
+
+        <div class="card-footer mb-3" style="padding-top: 1px !important; height: 2rem;">
+            <div class="d-flex" style="justify-content: space-between !important; padding-left: 30px !important; padding-right: 30px !important; ">
+                <a asp-controller="Comment" asp-action="Index" asp-route-Author="@Model.Username" class="btn btn-custom4">@Model.Comments.Count() comments</a>
+                <a asp-controller="Thread" asp-action="Index" asp-route-Author="@Model.Username" class="btn btn-custom4">@Model.Threads.Count() threads</a>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<br/>
+
+@{
+    if (adminStatus == "True" && (int.Parse(loggedId) == Model.Id))
+    {
+        <div class="d-flex justify-content-center">
+            <p class="d-inline-flex gap-1">
+                <button class="btn btn-custom6" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                    Admin panel
+                </button>
+            </p>
+        </div>
+        <div class="d-flex justify-content-center">
+            <div class="collapse" id="collapseExample">
+                <div class="card bg-black text-light" style="width: 18rem;">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item bg-black text-light" style="border-color: #27292b">
+                            <a asp-controller="Thread" asp-action="Index" class="btn btn-custom4"><h6>Manage threads</h6></a>
+                        </li>
+                        <li class="list-group-item bg-black text-light" style="border-color: #27292b">
+                            <a asp-controller="User" asp-action="Index" class="btn btn-custom4"><h6>Manage users</h6></a>
+                        </li>
+                        <li class="list-group-item bg-black text-light" style="border-color: #27292b">
+                            <a asp-controller="Comment" asp-action="Index" class="btn btn-custom4"><h6>Manage comments</h6></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    }
+}
+
+

@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = "Delete Thread";
+}
+
+@model Thread
+
+
+<div class="d-flex justify-content-center">
+    <div class="card bg-black text-light " style="width: 35rem;">
+
+        <div class="card-header">
+            <h5>
+                Are you sure you want to delete this thread?
+                <br />
+            </h5>
+        </div>
+
+        <form asp-controller="Thread" asp-action="DeleteThread" method="post">
+
+            <div class="card-body" style="padding-bottom: 1px; margin-bottom: 0px;">
+
+                <input type="hidden" asp-for="Id" value="@Model.Id" />
+                <input type="hidden" asp-for="Date" value="@DateTime.Now" />
+
+                <div class="mb-3">
+                    <p>Title: "@Model.Title.ToString()"</p>
+                            <hr/>
+                    <p>@Model.Content</p>
+                </div>
+
+            </div>
+
+
+            <hr />
+
+            <div class="card-footer text-end mb-3">
+                <a asp-controller="Thread" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-custom5">Cancel</a>
+                <input type="submit" value="Confirm Delete" class="btn btn-custom1" />
+            </div>
+        </form>
+    </div>
+</div>

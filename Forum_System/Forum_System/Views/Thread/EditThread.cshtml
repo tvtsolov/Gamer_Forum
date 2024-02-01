@@ -1,0 +1,47 @@
+﻿@{
+    ViewData["Title"] = "Edit Thread";
+}
+
+@model Thread
+
+
+<div class="d-flex justify-content-center">
+    <div class="card bg-black text-light " style="width: 35rem;">
+
+        <div class="card-header">
+            <h5>
+                Edit thread:
+                <br />
+            </h5>
+        </div>
+
+        <form asp-controller="Thread" asp-action="EditThread" method="post">
+
+            <div class="card-body" style="padding-bottom: 1px; margin-bottom: 0px;">
+
+                <input type="hidden" asp-for="Id" value="@Model.Id" />
+                <input type="hidden" asp-for="Date" value="@DateTime.Now" />
+
+                <div class="mb-0">
+                    <textarea asp-for="Title" class="form-control-custom" id="commentTextArea" rows="2" placeholder="Write a title...">@Model.Title</textarea>
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <hr />
+
+                <div class="mb-3">
+                    <textarea asp-for="Content" class="form-control-custom" id="commentTextArea" rows="5" placeholder="Write the main message of the thread...">@Model.Content</textarea>
+                    <span asp-validation-for="Content" class="text-danger"></span>
+                </div>
+
+            </div>
+
+            <hr />
+
+            <div class="card-footer text-end mb-3">
+                <a asp-controller="Thread" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-custom4">Cancel</a>
+                <input type="submit" value="Post" class="btn btn-custom1" />
+            </div>
+        </form>
+    </div>
+</div>

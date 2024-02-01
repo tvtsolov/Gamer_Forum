@@ -1,0 +1,43 @@
+﻿@{
+    ViewData["Title"] = "Change avatar";
+
+    var username = Context.Session.GetString("CurrentUser");
+    var loggedId = Context.Session.GetString("CurrentID");
+
+    AvatarHelper avatarHelper = new AvatarHelper();
+    string avatarLocation = avatarHelper.GetAvatar(username);
+}
+
+@model AvatarViewModel
+
+
+
+<div class="d-flex justify-content-center">
+    <div class="card bg-black text-light " style="width: 25rem;">
+        <div class="card-header">
+            <h4>Your current profile picture</h4>
+        </div>
+
+        <form asp-controller="User" asp-action="ChangeAvatar" enctype="multipart/form-data">
+
+            <div class="card-body text-center" style="padding-bottom: 1px; margin-bottom: 0px;">
+                <div class="mb-3">
+                    <img src="/images/avatars/@avatarLocation" alt="Logo" class="rounded-circle" style="width: 100px; height: 100px;" />
+                </div>
+            </div>
+
+            <div class="text-center" style="padding-left: 70px">
+                <span asp-validation-for="Picture"></span>
+                <input asp-for="Picture" type="file" class="btn btn-custom4" />
+            </div>
+
+            <hr />
+
+            <div class="card-footer text-end mb-3">
+                <a asp-controller="User" asp-action="Details" asp-route-id="@loggedId" class="btn btn-custom4">Back</a>
+                <input type="submit" value="Upload" class="btn btn-custom1">
+            </div>
+
+        </form>
+    </div>
+</div>

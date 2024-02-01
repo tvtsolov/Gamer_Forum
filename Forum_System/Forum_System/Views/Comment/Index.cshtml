@@ -1,0 +1,181 @@
+﻿@{
+    ViewData["Title"] = "Comments";
+    bool isLogged = Context.Session.Keys.Contains("CurrentUser");
+    string AdminStatus = Context.Session.GetString("AdminStatus");
+    var loggedId = Context.Session.GetString("CurrentID");
+
+    TimeDeltaHelper timeHelper = new TimeDeltaHelper();
+    AvatarHelper avatarHelper = new AvatarHelper();
+
+}
+
+@model PaginatedList<Comment>
+
+<nav class="navbar navbar-inner2 navbar-expand-lg fixed-top fixed-top-2 z-1 bg-black" data-bs-theme="dark">
+
+    <div class="container-fluid">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="--bs-nav-link-padding-y: 0rem;">
+
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" asp-controller="Comment" asp-action="Index"><b>Comments</b></a>
+                </li>
+
+                <li class="nav-item">
+                    <button class="btn btn-custom1 btn-sm2" onclick="history.back()">Go Back</button>
+                </li>
+
+            </ul>
+
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0" style="--bs-nav-link-padding-y: 0rem;">
+
+                <li class="dropdown">
+
+                    <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                        <img src="~/images/looking_glass1.png" alt="Logo" width="26" height="26" class="d-inline-block align-text-top">
+                    </a>
+
+                    <form class="dropdown-menu dropdown-menu-end bg-black p-4" style="width: 200px;">
+
+                        <div class="mb-3">
+                            <input type="text" class="form-control-custom" name="ThreadTitle" placeholder="Thread title">
+                        </div>
+
+                        <div class="mb-3">
+                            <input type="text" class="form-control-custom" name="Author" placeholder="Author">
+                        </div>
+
+                        <div class="mb-3">
+                            <input type="text" class="form-control-custom" name="Content" placeholder="Content">
+                        </div>
+
+                        <input type="submit" value="Search" class="btn btn-custom1">
+                    </form>
+
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</nav>
+
+@{
+    if (Model.Count() > 1)
+    {
+        <div class="text-light" style="margin-top:25px;">
+            <div class="d-flex justify-content-center" style="gap: 35px;">
+                <a class="btn btn-custom6" style="width: 120px;" asp-controller="Comment" asp-action="Index" asp-route-SortBy="date" asp-route-SortOrder="@ViewData["SortOrder"]">Date</a>
+                <a class="btn btn-custom6" style="width: 120px;" asp-controller="Comment" asp-action="Index" asp-route-SortBy="content" asp-route-SortOrder="@ViewData["SortOrder"]">Content</a>
+            </div>
+        </div>
+    }
+}
+
+
+<div class="body-thread" style="margin-top: 25px; margin-bottom: 18px;">
+    @{
+        foreach (var comment in Model)
+        {
+            string avatarLocation = avatarHelper.GetAvatar(comment.Author.Username);
+
+            <div class="bg-black text-light">
+                <div class="container-comment-details">
+                    <div class="box-thread-details--author">
+                        <img class="avatar" src="~/images/avatars/@avatarLocation" alt="avatar" />
+                        <br />
+                        <a asp-controller="User" asp-action="Details" asp-route-id="@comment.AuthorId" class="link-light" style="text-decoration: none"><b>@comment.Author.Username</b></a>
+                    </div>
+                    <div class="box-thread-details--message">
+                        <p class="card-text">@comment.Content</p>
+
+                        @if (comment.Edited == true)
+                        {
+                            <span class="gray-text small-b-margin"> Last edit:@timeHelper.GetDelta(comment.EditDate) </span>
+                            <br />
+                        }
+
+                        <span class="mb-1">@timeHelper.GetDelta(comment.CreationDate)</span>
+
+                        @* edit button *@
+
+                        @if (comment.AuthorId == int.Parse(loggedId))
+                        {
+                            <a class="btn btn-custom5" asp-controller="Thread" asp-action="EditComment" asp-route-id="@comment.Id">
+                                <span class="gray-text px-2">Edit</span>
+                            </a>
+                        }
+
+                        @* delete comment button *@
+
+                        @if (AdminStatus == "True" || comment.AuthorId == int.Parse(loggedId))
+                        {
+                            <a class="btn btn-custom5" asp-controller="Thread" asp-action="DeleteComment" asp-route-id="@comment.Id">
+                                <span class="gray-text px-2">Delete</span>
+                            </a>
+                        }
+
+                        <a class="btn btn-custom5" asp-controller="Thread" asp-action="Details" asp-route-id="@comment.ThreadId">
+                            <span class="gray-text px-2">Thread</span>
+                        </a>
+
+                    </div>
+
+                </div>
+            </div>
+        }
+    }
+</div>
+   
+
+@{
+    string prevState = (Model.HasPreviousPage) ? "" : "disabled";
+    string nextState = (Model.HasNextPage) ? "" : "disabled";
+    int prevPage = Model.PageNumber - 1;
+    int nextPage = Model.PageNumber + 1;
+}
+
+<div class="d-flex justify-content-center">
+    <nav aria-label="Page navigation">
+        <ul class="pagination pagination-custom-colors">
+
+            <li class="page-item @prevState">
+                <a class="page-link" asp-controller="Comment" asp-action="Index" asp-route-PageNumber="@prevPage" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+
+            @{
+                for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    if (i == Model.PageNumber)
+                    {
+                        <li class="page-item">
+                            <a class="page-link active" aria-current="page">@i</a>
+                        </li>
+
+                    }
+                    else
+                    {
+                        <li class="page-item">
+                            <a class="page-link" asp-controller="Comment" asp-action="Index" asp-route-PageNumber="@i">@i</a>
+                        </li>
+                    }
+                }
+            }
+
+            <li class="page-item @nextState">
+                <a class="page-link" asp-controller="User" asp-action="Comment" asp-route-PageNumber="@nextPage" aria-label="Previous">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+
+        </ul>
+    </nav>
+
+</div>

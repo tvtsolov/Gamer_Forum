@@ -1,0 +1,35 @@
+﻿@{
+    ViewData["Title"] = "New comment";
+}
+
+@model CommentCreateViewModel
+
+<div class="d-flex justify-content-center">
+    <div class="card bg-black text-light " style="width: 35rem;">
+
+        <div class="card-header">
+            <h5>Commenting in '@ViewData["ThreadTitle"]'</h5>
+        </div>
+
+        <form asp-controller="Comment" asp-action="Create" method="post">
+
+            <div class="card-body" style="padding-bottom: 1px; margin-bottom: 0px;">
+
+                <input type="hidden" asp-for="ThreadId" name="ThreadId" value="@Model.ThreadId" />
+                
+                <div class="mb-3">
+                    <textarea asp-for="Content" class="form-control-custom" id="commentTextArea" rows="3" placeholder="Write a comment...">@Model.Content</textarea>
+                    <span asp-validation-for="Content" class="text-danger"></span>
+                </div>
+            </div>
+
+            <hr/>
+
+            <div class="card-footer text-end mb-3">
+                    <a asp-controller="Thread" asp-action="Details" asp-route-id="@Model.ThreadId" class="btn btn-custom4">Cancel</a>
+                    <input type="submit" value="Post" class="btn btn-custom1" />
+            </div>
+
+        </form>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+﻿
+
+@* ------- not used in the project --------------- *@
+@* ------- use Thread/DeleteComment instead --------------- *@
+
+
+@{
+    ViewData["Title"] = "Delete";
+    var currentUser = Context.Session.GetString("CurrentUser");
+}
+
+@model Comment
+
+<div class="d-flex justify-content-center">
+    <div class="card bg-black text-light " style="width: 25rem;">
+
+        <div class="card-header">
+            @{
+                if (Model.Author.Username == currentUser)
+                {
+                    <text>Are you sure you want to delete your comment:</text>
+                }
+                else
+                {
+                    <text>Are you sure you want to delete @Model.Author.Username's comment:</text>
+                }
+            }
+            
+        </div>
+
+        <div class="card-body">
+            <div class="mb-3">
+                <text>'@Model.Content' (@Model.CreationDate.ToString("MMM dd, yyyy"))</text>
+            </div>
+        </div>
+
+        <div class="card-footer text-end mb-3" style="padding-bottom: 1px; margin-bottom: 0px;">
+            <div class="d-flex justify-content-end">
+                <a asp-controller="Thread" asp-action="Details" asp-route-id="@Model.ThreadId" class="btn btn-custom4">Back</a>
+
+                <form asp-controller="Comment" asp-action="Delete" method="post">
+                    <input type="submit" value="Delete" class="btn btn-custom1" />
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,21 @@
+﻿@{
+	ViewData["Title"] = "Error";
+}
+
+
+<div class="d-flex justify-content-center">
+	<div class="card bg-black text-center" style="width: 25rem;">
+		<div class="card-body" style="padding-bottom: 0px;">
+
+			<h1 style="color: #840d0d; font-size: 20vh;">@Context.Response.StatusCode</h1>
+			<text class="text-light" style="font-size: 2vh;">@ViewData["ErrorMessage"]</text>
+		
+		</div>
+		<hr style="color: #fefefe; padding-top: 0px; padding-bottom: 0px;"/>
+		<div class="card-footer" style="padding-top: 0px;">
+			<a asp-controller="Home" asp-action="Index" class="btn btn-custom1">Back to Home</a>
+		</div>
+	
+	</div>
+</div>
+

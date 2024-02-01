@@ -1,0 +1,206 @@
+﻿@using Forum_System.Models
+@model HomeIndexViewModel
+
+@{
+    AvatarHelper avatarHelper = new AvatarHelper();
+    TimeDeltaHelper timeHelper = new TimeDeltaHelper();
+
+    string commenterAvatarLocation = avatarHelper.GetAvatar(Model.LastComment.Author.Username);
+
+    bool isLogged = Context.Session.Keys.Contains("CurrentUser");
+    ViewData["Title"] = "Gamer's Forum - Home";
+}
+
+
+<div class="d-flex justify-content-center">
+    <div class="btn-group" style="margin-bottom: 15px;" role="group">
+        <a asp-controller="Thread" asp-action="Index" class="btn btn-custom7" style="border-width: 3px; width:25rem;" type="button">
+            <div align="left">
+                <h3>Enter the discussion!</h3>
+                <h6>Share Your Insights, Connect with Gamers!</h6>
+            </div>
+        </a>
+        <a asp-controller="Thread" asp-action="Create" class="btn btn-custom1" type="button">
+            <img src="~/images/write.png" style="width: 64px; height:64px;">
+        </a>
+    </div>
+</div>
+
+
+<div class="">
+
+    <h3 style="color: #B2B2B2">Latest Threads</h3>
+</div>
+
+
+@* TABLE 1 *@
+
+<table class="table table-custom table-dark table-hover bg-black-1" >
+    <thead>
+        <tr>
+            <th scope="col" class="thread-home-size">Title</th>
+            <th scope="col" class="ten-percent">Comments</th>
+            <th scope="col" class="eight-percent">Rating</th>
+            <th scope="col" class="twenty-percent">Created</th>
+        </tr>
+    </thead>
+        @foreach (var t in Model.ThreadsByDate)
+        {
+            string avatarLocation = avatarHelper.GetAvatar(t.Author.Username);
+      
+            <tr>
+                <td>
+                    @if (isLogged)
+                    {
+                        <a asp-controller="Thread" asp-action="Details" asp-route-id="@t.Id" class="link-light" style="text-decoration: none">
+                            @t.Title
+                        </a>
+                            <br/>
+                        <span class="gray-text">created by</span>
+                        <br/>
+                        <a asp-controller="User" asp-action="Details" asp-route-id="@t.Author.Id" class="link-light" style="text-decoration: none">
+                            <span>@t.Author.Username.ToString()</span>
+                            <span><img class="avatar-home" src="~/images/avatars/@avatarLocation" alt="avatar" /></span>
+                        </a>
+                    } else {
+                        <a asp-controller="Auth" asp-action="Login" class="link-light" style="text-decoration: none">
+                        @t.Title
+                        </a>
+                        <br />
+                        <span class="gray-text">created by</span>
+                        <br />
+                        <span>@t.Author.Username.ToString()</span>
+                    }
+                </td>
+
+                <td>@t.Comments.Count</td>
+                <td>
+                    <span >                                
+                                <div class="rating-group">
+                                    @{
+                                                                        
+                                        double ratingValue = t.Ratings?.Any() == true ? t.Ratings.Average(r => r.Value) : 0.0;
+                                
+                                        double roundedRating = Math.Round(ratingValue * 2) / 2;
+                                        bool hasHalfStarValue = Math.Truncate(roundedRating) > 0;
+                                        double endValue = roundedRating;
+                                        bool isHalf = true;
+                                        for (double i = 0.5; i <= 5; i += 0.5)
+                                        {
+                                            if (isHalf)
+                                            {
+                                                if (i <= endValue)
+                                                {
+                                                    <label class="rating__label rating__label--half" ><i class="rating__icon rating__icon--star fa fa-star-half yellow-star"></i></label>
+                                                }
+                                                else
+                                                {
+                                                    <label class="rating__label rating__label--half" ><i class="rating__icon rating__icon--star fa fa-star-half white-star"></i></label>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (i <= endValue)
+                                                {
+                                                    <label class="rating__label" ><i class="rating__icon rating__icon--star fa fa-star yellow-star"></i></label>
+                                                }
+                                                else
+                                                {
+                                                    <label class="rating__label" ><i class="rating__icon rating__icon--star fa fa-star white-star"></i></label>
+                                                }
+                                            }
+                                            isHalf = !isHalf;
+                                        }
+                                     }
+                                    
+                                </div>
+                            </span>
+                </td>
+                <td>@timeHelper.GetDelta(t.Date)</td>
+            </tr>
+        }
+
+</table>
+
+
+@* SIDE COLUMN *@
+
+
+    <div class="">
+        <div class="card card-size-custom card-body text-white bg-black-1 border-secondary">
+            <h6 class="card-title">Total number of threads:</h6>
+            <h6 class="card-text">@Model.TotalNumberOfThreads</h6>
+        </div>
+
+
+        <div class="card card-size-custom card-body text-white bg-black-1 border-secondary">
+            <h6 class="card-title">Total number of users:</h6>
+            <h6 class="card-text">@Model.TotalNumberOfUsers</h6>
+        </div>
+
+        <div class="card card-size-custom card-body text-white bg-black-1 border-secondary">
+            <h6 class="card-title">Latest comment:</h6>
+            <p class="card-text">@Model.LastComment.Content</p>
+            <p class="card-text mb-0 gray-text">author:</p>
+            <p class="card-text">
+                @Model.LastComment.Author.Username.ToString()
+                @{
+                    if (isLogged)
+                    {
+                        <img class="avatar-home" src="~/images/avatars/@commenterAvatarLocation" alt="avatar" />
+                    }
+                }
+            </p>
+        <a asp-controller="Thread" asp-action="Details" asp-route-id="@Model.LastComment.ThreadId" class="btn btn-primary btn-custom-bg-dark-prpl">Open thread</a>
+
+        </div>
+    </div>
+
+
+
+
+
+@* TABLE 2 *@
+
+<div class="" style="clear: both;">
+
+    <h3 style="color: #B2B2B2">Top 10 Most Commented Threads</h3>
+</div>
+
+<table class="table table-striped table-dark table-bordered table-hover ">
+    <thead>
+        <tr>
+            <th scope="col" >Title</th>
+            <th scope="col" class="ten-percent">Comments</th>
+            <th scope="col" class="ten-percent">Rating</th>
+            <th scope="col" class="twenty-percent">Date Created</th>
+        </tr>
+    </thead>
+        @foreach (var t in Model.ThreadsByComments)
+        {
+        <tr>
+            <td>
+                @if (isLogged)
+                {
+                    <a asp-controller="Thread" asp-action="Details" asp-route-id="@t.Id" class="link-light" style="text-decoration: none">
+                        @t.Title
+                    </a>
+                }
+                else
+                {
+                    <a asp-controller="Auth" asp-action="Login" class="link-light" style="text-decoration: none">
+                        @t.Title
+                    </a>
+                }
+            </td>
+
+            <td>@t.Comments.Count</td>
+            <td>@(t.Ratings?.Any() == true ? t.Ratings.Average(r => r.Value) : 0.0)</td>
+            <td>@timeHelper.GetDelta(t.Date)</td>
+        </tr>
+}
+    
+   
+
+</table>
+

@@ -1,0 +1,231 @@
+﻿@{
+    ViewData["Title"] = "Users";
+    bool isLogged = Context.Session.Keys.Contains("CurrentUser");
+    string adminStatus = Context.Session.GetString("AdminStatus");
+
+    AvatarHelper avatarHelper = new AvatarHelper();
+}
+
+@model PaginatedList<User>
+
+<nav class="navbar navbar-inner2 navbar-expand-lg fixed-top fixed-top-2 z-1 bg-black" data-bs-theme="dark">
+
+    <div class="container-fluid">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="--bs-nav-link-padding-y: 0rem;">
+
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" asp-controller="User" asp-action="Index"><b>Users</b></a>
+                </li>
+
+                <li class="nav-item">
+                    <button class="btn btn-custom1 btn-sm2" onclick="history.back()">Go Back</button>
+                </li>
+
+            </ul>
+
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0" style="--bs-nav-link-padding-y: 0rem;">
+
+                <li class="dropdown">
+
+                    <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                        <img src="~/images/looking_glass1.png" alt="Logo" width="26" height="26" class="d-inline-block align-text-top">
+                    </a>
+
+                    <form class="dropdown-menu dropdown-menu-end bg-black p-4" style="width: 200px;">
+
+                        <div class="mb-3">
+                            <input type="text" name="Username" class="form-control-custom" placeholder="Username" />
+                        </div>
+
+                        <div class="mb-3">
+                            <input type="text" name="FirstName" class="form-control-custom" placeholder="First name" />
+                        </div>
+
+                        <div class="mb-3">
+                            <input type="text" name="LastName" class="form-control-custom" placeholder="Last name" />
+                        </div>
+
+                        <div class="mb-3">
+                            <input type="text" name="Role" class="form-control-custom" placeholder="Role" />
+                        </div>
+
+                        <div class="mb-3">
+                            <input type="text" name="Email" class="form-control-custom" placeholder="Email" />
+                        </div>
+
+                        <input type="submit" value="Search" class="btn btn-custom1">
+                    </form>
+
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</nav>
+
+
+
+<table class="table table-dark table-hover" style="margin-top: 45px;">
+    <thead>
+        <tr class="table-dark">
+
+            <th scope="col" class="th-colorfy">
+                <a class="clear-link" asp-controller="User" asp-action="Index" asp-route-SortBy="id" asp-route-SortOrder="@ViewData["SortOrder"]">
+                    #
+                </a>
+            </th>
+            <th scope="col" class="th-colorfy">
+                <a class="clear-link" asp-controller="User" asp-action="Index" asp-route-SortBy="username" asp-route-SortOrder="@ViewData["SortOrder"]">
+                    Username
+                </a>
+            </th>
+            <th scope="col" class="th-colorfy">
+                <a class="clear-link" asp-controller="User" asp-action="Index" asp-route-SortBy="firstname" asp-route-SortOrder="@ViewData["SortOrder"]">
+                    First Name
+                </a>
+            </th>
+            <th scope="col" class="th-colorfy">
+                <a class="clear-link" asp-controller="User" asp-action="Index" asp-route-SortBy="lastname" asp-route-SortOrder="@ViewData["SortOrder"]">
+                    Last Name
+                </a>
+            </th>
+            <th scope="col" class="th-colorfy">
+                <a class="clear-link" asp-controller="User" asp-action="Index" asp-route-SortBy="role" asp-route-SortOrder="@ViewData["SortOrder"]">
+                    Role
+                </a>
+            </th>
+            <th scope="col" width="5%" class="th-colorfy">
+                <a class="clear-link" asp-controller="User" asp-action="Index" asp-route-SortBy="threads" asp-route-SortOrder="@ViewData["SortOrder"]">
+                    Threads
+                </a>
+            </th>
+            <th scope="col" width="5%" class="th-colorfy">
+                <a class="clear-link" asp-controller="User" asp-action="Index" asp-route-SortBy="comments" asp-route-SortOrder="@ViewData["SortOrder"]">
+                    Comments
+                </a>
+            </th>
+
+            @{
+                if (adminStatus == "True")
+                {
+                    <th scope="col" width="5%" class="th-colorfy">
+                        <a class="clear-link" asp-controller="User" asp-action="Index" asp-route-SortBy="email" asp-route-SortOrder="@ViewData["SortOrder"]">
+                            E-mail
+                        </a>
+                    </th>
+                }
+            }
+            
+        </tr>
+    </thead>
+    <tbody>
+        @{
+
+            foreach (var user in Model)
+            {
+                string role = "User";
+                string avatarLocation = avatarHelper.GetAvatar(user.Username);
+
+
+                <tr class="table-dark">
+                    <th scope="row" class="th-colorfy">@user.Id</th>
+                    <td class="td-colorfy">
+                        <a asp-controller="User" asp-action="Details" asp-route-id="@user.Id" class="clear-link">
+                            <img class="avatar-home" src="~/images/avatars/@avatarLocation" alt="avatar" />
+                            @user.Username
+                        </a>
+                    </td>
+                    <td class="td-colorfy">@user.FirstName</td>
+                    <td class="td-colorfy">@user.LastName</td>
+
+                    @{
+                        if (user.IsAdmin)
+                        {
+                            role = "Admin";
+                        }
+                        else if(user.IsBlocked)
+                        {
+                            role = "Blocked";
+                        }
+                    }
+
+                    <td class="td-colorfy">@role</td>
+                    <td class="td-colorfy">
+                        <a asp-controller="Thread" asp-action="Index" asp-route-Author="@user.Username" class="clear-link">
+                            @user.Threads.Count()
+                        </a>
+                    </td>
+                    <td class="td-colorfy">
+                        <a asp-controller="Comment" asp-action="Index" asp-route-Author="@user.Username" class="clear-link">
+                            @user.Comments.Count()                  
+                        </a>
+                    </td>
+                    
+                    @{
+                        
+                        if (adminStatus == "True")
+                        {
+                            <td class="td-colorfy">@user.Email</td>
+                        }
+                    }
+                    
+                </tr>
+            }
+            }   
+    </tbody>
+</table>
+
+
+@{
+    string prevState = (Model.HasPreviousPage) ? "" : "disabled";
+    string nextState = (Model.HasNextPage) ? "" : "disabled";
+    int prevPage = Model.PageNumber - 1;
+    int nextPage = Model.PageNumber + 1;
+}
+
+<div class="d-flex justify-content-center">
+    <nav aria-label="Page navigation">
+        <ul class="pagination pagination-custom-colors">
+
+            <li class="page-item @prevState">
+                <a class="page-link" asp-controller="User" asp-action="Index" asp-route-PageNumber="@prevPage" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+
+            @{
+                for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    if (i == Model.PageNumber)
+                    {
+                        <li class="page-item">
+                            <a class="page-link active" aria-current="page">@i</a>
+                        </li>
+
+                    }
+                    else
+                    {
+                        <li class="page-item">
+                            <a class="page-link" asp-controller="User" asp-action="Index" asp-route-PageNumber="@i">@i</a>
+                        </li>
+                    }
+                }
+            }
+
+            <li class="page-item @nextState">
+                <a class="page-link" asp-controller="User" asp-action="Index" asp-route-PageNumber="@nextPage" aria-label="Previous">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+
+        </ul>
+    </nav>
+
+</div>

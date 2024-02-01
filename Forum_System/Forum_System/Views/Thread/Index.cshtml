@@ -1,0 +1,210 @@
+﻿
+@{
+    ViewData["Title"] = "Threads";
+    bool isLogged = Context.Session.Keys.Contains("CurrentUser");
+
+    TimeDeltaHelper timeHelper = new TimeDeltaHelper();
+    AvatarHelper avatarHelper = new AvatarHelper();
+}
+
+@model PaginatedList<Thread>
+
+<nav class="navbar navbar-inner2 navbar-expand-lg fixed-top fixed-top-2 z-1 bg-black" data-bs-theme="dark">
+
+    <div class="container-fluid">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="--bs-nav-link-padding-y: 0rem;">
+
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" asp-controller="Thread" asp-action="Index"><b>Threads</b></a>
+                </li>
+
+                <li class="nav-item">
+                    <button class="btn btn-custom1 btn-sm2" onclick="history.back()">Go Back</button>
+                </li>
+
+            </ul>
+
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0" style="--bs-nav-link-padding-y: 0rem;">
+
+                <li class="dropdown">
+
+                    <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                        <img src="~/images/looking_glass1.png" alt="Logo" width="26" height="26" class="d-inline-block align-text-top">
+                    </a>
+
+                    <form class="dropdown-menu dropdown-menu-end bg-black p-4" style="width: 200px;">
+
+                        <div class="mb-3">
+                            <input type="text" class="form-control-custom" name="Title" placeholder="Enter title">
+                        </div>
+
+                        <div class="mb-3">
+                            <input type="text" class="form-control-custom" name="Author" placeholder="Enter author">
+                        </div>
+
+                        <input type="submit" value="Search" class="btn btn-custom1">
+                    </form>
+
+                </li>
+
+                <li class="nav-item">
+                    <a asp-controller="Thread" asp-action="Create" class="btn btn-custom1 btn-sm2"><b>New post</b></a>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</nav>
+
+
+@{
+    if (Model.Count() > 1)
+    {
+        <div class="text-light" style="margin-top:25px;">
+            <div class="d-flex justify-content-center" style="margin-top:25px;gap: 35px;">
+                <a class="btn btn-custom6" style="width: 120px;" asp-controller="Thread" asp-action="Index" asp-route-SortBy="date" asp-route-SortOrder="@ViewData["SortOrder"]" asp-route-Author="@ViewData["AuthorSearch"]" asp-route-Title="@ViewData["TitleSearch"]">Date</a>
+                <a class="btn btn-custom6" style="width: 120px;" asp-controller="Thread" asp-action="Index" asp-route-SortBy="title" asp-route-SortOrder="@ViewData["SortOrder"]" asp-route-Author="@ViewData["AuthorSearch"]" asp-route-Title="@ViewData["TitleSearch"]">Title</a>
+                <a class="btn btn-custom6" style="width: 120px;" asp-controller="Thread" asp-action="Index" asp-route-SortBy="comments" asp-route-SortOrder="@ViewData["SortOrder"]" asp-route-Author="@ViewData["AuthorSearch"]" asp-route-Title="@ViewData["TitleSearch"]">Comments</a>
+                <a class="btn btn-custom6" style="width: 120px;" asp-controller="Thread" asp-action="Index" asp-route-SortBy="ratings" asp-route-SortOrder="@ViewData["SortOrder"]" asp-route-Author="@ViewData["AuthorSearch"]" asp-route-Title="@ViewData["TitleSearch"]">Rating</a>
+            </div>
+        </div>
+    }
+}
+
+
+<div class="d-flex justify-content-center">
+    <div class="card" style="width: 47rem; border-color: #27292b; margin-top: 18px">
+        <ul class="list-group list-group-flush">
+            @{
+                foreach (var thread in Model)
+                {
+                    string avatarLocation = avatarHelper.GetAvatar(thread.Author.Username);
+
+                    <a asp-controller="Thread" asp-action="Details" asp-route-id="@thread.Id" style="text-decoration:none">
+
+                    <li class="list-group-item bg-black text-bg-dark" style="border-color:#27292b;">
+                        <b>@thread.Title</b>
+
+                        <div class="float-end text-secondary">
+                            @timeHelper.GetDelta(thread.Date)
+                        </div>
+
+                        <div class="bottom-right-text">
+                                @{
+                                    double ratingValue = thread.Ratings?.Any() == true ? thread.Ratings.Average(r => r.Value) : 0.0;
+                                }
+                            <span class="font-size-small gray-text" style="margin-right: 25px;"> Rating: @ratingValue</span>
+                                
+                            
+                            <span >                                
+                                <div class="rating-group">
+                                    @{
+                                        double roundedRating = Math.Round(ratingValue * 2) / 2;
+                                        bool hasHalfStarValue = Math.Truncate(roundedRating) > 0;
+                                        double endValue = roundedRating;
+                                        bool isHalf = true;
+                                        for (double i = 0.5; i <= 5; i += 0.5)
+                                        {
+                                            if (isHalf)
+                                            {
+                                                if (i <= endValue)
+                                                {
+                                                    <label class="rating__label rating__label--half" ><i class="rating__icon rating__icon--star fa fa-star-half yellow-star"></i></label>
+                                                }
+                                                else
+                                                {
+                                                    <label class="rating__label rating__label--half" ><i class="rating__icon rating__icon--star fa fa-star-half white-star"></i></label>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (i <= endValue)
+                                                {
+                                                    <label class="rating__label" ><i class="rating__icon rating__icon--star fa fa-star yellow-star"></i></label>
+                                                }
+                                                else
+                                                {
+                                                    <label class="rating__label" ><i class="rating__icon rating__icon--star fa fa-star white-star"></i></label>
+                                                }
+                                            }
+                                            isHalf = !isHalf;
+                                        }
+                                     }
+                                    
+                                </div>
+                            </span>
+                        </div>
+
+
+                        <div class="card-footer">
+                            <small>
+                                    @thread.Comments.Count() comments •
+                                    <img class="avatar-home" src="~/images/avatars/@avatarLocation" alt="avatar" />
+                                    @thread.Author.Username
+                            </small>
+                        </div>
+
+                    </li>
+                    </a>
+                }
+            }
+        </ul>
+    </div>
+</div>
+
+<br/>
+
+@{
+    string prevState = (Model.HasPreviousPage) ? "" : "disabled";
+    string nextState = (Model.HasNextPage) ? "" : "disabled";
+    int prevPage = Model.PageNumber - 1;
+    int nextPage = Model.PageNumber + 1;
+}
+
+
+<div class="d-flex justify-content-center">
+    <nav aria-label="Page navigation">
+        <ul class="pagination pagination-custom-colors">
+
+            <li class="page-item @prevState">
+                <a class="page-link" asp-controller="Thread" asp-action="Index" asp-route-PageNumber="@prevPage" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a> 
+            </li>
+
+            @{
+                for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    if (i == Model.PageNumber)
+                    {
+                    <li class="page-item">
+                        <a class="page-link active" aria-current="page">@i</a>
+                    </li>
+
+                    }
+                    else
+                    {
+                    <li class="page-item">
+                        <a class="page-link" asp-controller="Thread" asp-action="Index" asp-route-PageNumber="@i">@i</a>
+                    </li>
+                    }
+                }
+            }
+
+            <li class="page-item @nextState">
+                <a class="page-link" asp-controller="Thread" asp-action="Index" asp-route-PageNumber="@nextPage" aria-label="Previous">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+
+        </ul>
+    </nav>
+
+</div>

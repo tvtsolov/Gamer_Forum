@@ -1,0 +1,430 @@
+﻿
+@{
+    ViewData["Title"] = "Thread Details";
+    var AdminStatus = Context.Session.GetString("AdminStatus");
+    bool userIsAnonymous = false;
+
+    if (Model.LoggedUserId == -1)
+    {
+        userIsAnonymous = true;
+    }
+
+    TimeDeltaHelper timeHelper = new TimeDeltaHelper();
+    AvatarHelper avatarHelper = new AvatarHelper();
+
+    string authorAvatarLocation = avatarHelper.GetAvatar(Model.Author.Username);
+}
+
+@model ThreadDetailsViewModel
+
+
+@* NAVBAR *@
+
+<nav class="navbar navbar-inner2 navbar-expand-lg fixed-top fixed-top-2 z-1 bg-black" data-bs-theme="dark">
+
+    <div class="container-fluid">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="--bs-nav-link-padding-y: 0rem;">
+                
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" asp-controller="Thread" asp-action="Details" asp-route-id="@Model.Id"><b>@Model.Title</b></a>
+                </li>
+
+                @{
+                    if (userIsAnonymous)
+                    {
+                        <li class="nav-item">
+                            <a asp-controller="Home" asp-action="Index" class="btn btn-custom1 btn-sm2">Back to Home</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <button class="btn btn-custom1 btn-sm2" onclick="history.back()">Go Back</button>
+                        </li>
+                    }
+                }
+
+
+            </ul>
+            @{
+                if (!userIsAnonymous)
+                {
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0" style="--bs-nav-link-padding-y: 0rem;">
+                        <li class="nav-item">
+                            <a asp-controller="Comment" asp-action="Create" asp-route-id="@Model.Id" class="btn btn-custom1 btn-sm2"><b>Comment</b></a>
+                        </li>
+                    </ul>
+                }
+            }
+        </div>
+    </div>
+</nav>
+
+
+
+@* THREAD MAIN *@
+
+<div class="body-thread">
+    <div class="bg-black text-light">
+        <div class="container-thread-details">
+
+            @* AUTHOR INFO *@
+
+            <div class="box-thread-details--author">
+                <img class="avatar" src="~/images/avatars/@authorAvatarLocation" alt="avatar" />
+                <br/>
+                <a asp-controller="User" asp-action="Details" asp-route-id="@Model.AuthorId" class="link-light" style="text-decoration: none"><b>@Model.Author.Username</b></a>
+                <br/>
+                @{
+                    if(Model.Author.IsBlocked)
+                    {
+                        <div class="text-danger">Blocked</div>
+                    }
+                    else if(Model.Author.IsAdmin)
+                    {
+                        <div class="text-success">Admin</div>
+                    }
+                }
+            </div>
+
+            @* MAIN MESSAGE *@
+
+            <div class="box-thread-details--message">
+
+                <p class="card-text text-with-big-bottom">@Model.Content</p>
+
+                    @if (Model.IsEdited == true)
+                    {
+                        <span class="gray-text small-b-margin"> Last edit: @timeHelper.GetDelta(Model.EditDate)</span>
+                        <br />
+                    }
+                
+
+                <span class="mb-1">@timeHelper.GetDelta(Model.Date)</span>
+
+                <span style="margin-bottom: inherit;">
+                    @* edit button *@
+
+                    @if (Model.AuthorId == Model.LoggedUserId)
+                    {
+                        <a class="btn btn-custom5" asp-controller="Thread" asp-action="EditThread" asp-route-id="@Model.Id">
+                            <span class="gray-text px-2">Edit</span>
+                        </a>
+                    }
+                    @* delete thread button *@
+
+                    @if (AdminStatus == "True" || Model.AuthorId == Model.LoggedUserId)
+                    {
+                        <a class="btn btn-custom5" asp-controller="Thread" asp-action="DeleteThread" asp-route-id="@Model.Id">
+                            <span class="gray-text px-2">Delete</span>
+                        </a>
+                    }
+                </span>
+
+                <div class="bottom-right-text" >
+
+                    <!-- Button trigger popup style="padding-right: 15px" -->
+                    <span style="padding-right: 55px">
+
+                        @{
+                            if(Model.Ratings.Any(r => r.UserId == Model.LoggedUserId)) //hass been rated already
+                            {
+                                <button type="button" class="btn btn-primary btn-custom-bg-dark-prpl" data-bs-toggle="modal" data-bs-target="#RemoveRatingModal">
+                                    Your Rating: @Model.Ratings.FirstOrDefault(r => r.UserId == Model.LoggedUserId).Value
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="button" class="btn btn-primary btn-custom-bg-dark-prpl" data-bs-toggle="modal" data-bs-target="#RateThreadModal">
+                                    Rate this thread
+                                </button>
+                            }
+                        }
+                    </span>
+
+                    <!-- Add Rating Modal -->
+                    <div class="modal fade " id="RateThreadModal" tabindex="-1" aria-labelledby="RateThreadModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered ">
+                            <div class="modal-content gradient-rate-window centered-text">
+                                <div class="modal-header ">
+                                    <h1 class="modal-title fs-5" id="RateThreadModalLabel">Rate thread "@Model.Title"</h1>
+                                    
+                                </div>
+                                <form asp-controller="Thread" asp-action="AddRating" method="post">
+                                <div class="modal-body ">
+                                    <div class="rating-group " id="font-size-popup">
+
+                                        <label aria-label="0.5 stars" class="rating__label rating__label--half" for="rating2-05"><i class="rating__icon rating__icon--star fa fa-star-half"></i></label>
+                                        <input class="rating__input" name="Rating" id="rating2-05" value="0.5" type="radio" checked>
+
+                                        <label aria-label="1 star" class="rating__label" for="rating2-10"><i class="rating__icon rating__icon--star fa fa-star"></i></label>
+                                        <input class="rating__input" name="Rating" id="rating2-10" value="1" type="radio">
+
+                                        <label aria-label="1.5 stars" class="rating__label rating__label--half" for="rating2-15"><i class="rating__icon rating__icon--star fa fa-star-half"></i></label>
+                                        <input class="rating__input" name="Rating" id="rating2-15" value="1.5" type="radio">
+
+                                        <label aria-label="2 stars" class="rating__label" for="rating2-20"><i class="rating__icon rating__icon--star fa fa-star"></i></label>
+                                        <input class="rating__input" name="Rating" id="rating2-20" value="2" type="radio">
+
+                                        <label aria-label="2.5 stars" class="rating__label rating__label--half" for="rating2-25"><i class="rating__icon rating__icon--star fa fa-star-half"></i></label>
+                                        <input class="rating__input" name="Rating" id="rating2-25" value="2.5" type="radio" >
+
+                                        <label aria-label="3 stars" class="rating__label" for="rating2-30"><i class="rating__icon rating__icon--star fa fa-star"></i></label>
+                                        <input class="rating__input" name="Rating" id="rating2-30" value="3" type="radio">
+
+                                        <label aria-label="3.5 stars" class="rating__label rating__label--half" for="rating2-35"><i class="rating__icon rating__icon--star fa fa-star-half"></i></label>
+                                        <input class="rating__input" name="Rating" id="rating2-35" value="3.5" type="radio">
+
+                                        <label aria-label="4 stars" class="rating__label" for="rating2-40"><i class="rating__icon rating__icon--star fa fa-star"></i></label>
+                                        <input class="rating__input" name="Rating" id="rating2-40" value="4" type="radio">
+
+                                        <label aria-label="4.5 stars" class="rating__label rating__label--half" for="rating2-45"><i class="rating__icon rating__icon--star fa fa-star-half"></i></label>
+                                        <input class="rating__input" name="Rating" id="rating2-45" value="4.5" type="radio">
+
+                                        <label aria-label="5 stars" class="rating__label" for="rating2-50"><i class="rating__icon rating__icon--star fa fa-star"></i></label>
+                                        <input class="rating__input" name="Rating" id="rating2-50" value="5" type="radio">
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+
+                                        <input type="hidden" name="threadId" value="@Model.Id" class="form-input" />
+                                    <button type="submit"  class="btn btn-primary mx-auto gradient-rate-window">Rate</button>
+                                </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>  
+
+
+                    <!-- Remove Rating Modal -->
+
+                    <div class="modal fade " id="RemoveRatingModal" tabindex="-1" aria-labelledby="RemoveRatingModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered ">
+                            <div class="modal-content gradient-rate-window centered-text">
+                                <div class="modal-header ">
+                                    <h1 class="modal-title fs-5" id="RemoveRatingModalLabel"> Your Rating for thread "@Model.Title"</h1>
+
+                                </div>
+                                <form asp-controller="Thread" asp-action="RemoveRating" method="post">
+                                    <div class="modal-body ">
+                                        <div class="rating-group " id="font-size-popup">
+                                            @{
+                                                double userRating;
+                                                if (@Model.Ratings.Any(r => r.UserId == Model.LoggedUserId))
+                                                {
+                                                    userRating = @Model.Ratings.FirstOrDefault(r => r.UserId == Model.LoggedUserId).Value;
+                                                }
+                                                else
+                                                {
+                                                    userRating = 0.0;
+                                                }
+                                            }
+                                            <input class="rating__input rating__input--none" checked name="Rating" id="rating2-0" value="0" type="radio" @(userRating == 0.0 ? "checked" : "") >
+                                            <label aria-label="0 stars" class="rating__label" for="rating2-0">&nbsp;</label>
+
+                                            <label aria-label="0.5 stars" class="rating__label rating__label--half" for="rating2-05"><i class="rating__icon rating__icon--star fa fa-star-half"></i></label>
+                                            <input class="rating__input" name="Rating" id="rating2-05" value="0.5" type="radio" @(userRating == 0.5 ? "checked" : "")>
+
+                                            <label aria-label="1 star" class="rating__label" for="rating2-10"><i class="rating__icon rating__icon--star fa fa-star"></i></label>
+                                            <input class="rating__input" name="Rating" id="rating2-10" value="1" type="radio" @(userRating == 1 ? "checked" : "")>
+
+                                            <label aria-label="1.5 stars" class="rating__label rating__label--half" for="rating2-15"><i class="rating__icon rating__icon--star fa fa-star-half"></i></label>
+                                            <input class="rating__input" name="Rating" id="rating2-15" value="1.5" type="radio" @(userRating == 1.5 ? "checked" : "") };>
+
+                                            <label aria-label="2 stars" class="rating__label" for="rating2-20"><i class="rating__icon rating__icon--star fa fa-star"></i></label>
+                                            <input class="rating__input" name="Rating" id="rating2-20" value="2" type="radio" @(userRating == 2 ? "checked" : "") };>
+
+                                            <label aria-label="2.5 stars" class="rating__label rating__label--half" for="rating2-25"><i class="rating__icon rating__icon--star fa fa-star-half"></i></label>
+                                            <input class="rating__input" name="Rating" id="rating2-25" value="2.5" type="radio" @(userRating == 2.5 ? "checked" : "") };>
+
+                                            <label aria-label="3 stars" class="rating__label" for="rating2-30"><i class="rating__icon rating__icon--star fa fa-star"></i></label>
+                                            <input class="rating__input" name="Rating" id="rating2-30" value="3" type="radio" @(userRating == 3 ? "checked" : "") };>
+
+                                            <label aria-label="3.5 stars" class="rating__label rating__label--half" for="rating2-35"><i class="rating__icon rating__icon--star fa fa-star-half"></i></label>
+                                            <input class="rating__input" name="Rating" id="rating2-35" value="3.5" type="radio" @(userRating == 3.5 ? "checked" : "") };>
+
+                                            <label aria-label="4 stars" class="rating__label" for="rating2-40"><i class="rating__icon rating__icon--star fa fa-star"></i></label>
+                                            <input class="rating__input" name="Rating" id="rating2-40" value="4" type="radio" @(userRating == 4 ? "checked" : "") };>
+
+                                            <label aria-label="4.5 stars" class="rating__label rating__label--half" for="rating2-45"><i class="rating__icon rating__icon--star fa fa-star-half"></i></label>
+                                            <input class="rating__input" name="Rating" id="rating2-45" value="4.5" type="radio" @(userRating == 4.5 ? "checked" : "") };>
+
+                                            <label aria-label="5 stars" class="rating__label" for="rating2-50"><i class="rating__icon rating__icon--star fa fa-star"></i></label>
+                                            <input class="rating__input" name="Rating" id="rating2-50" value="5" type="radio" @(userRating == 5 ? "checked" : "") };>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-footer">
+
+                                        <input type="hidden" name="threadId" value="@Model.Id" class="form-input"/>
+                                        @* //ratingId needed to pass *@
+                                        <button type="button" class="btn btn-primary mx-auto gradient-rate-window" onclick="closeAndOpenModals()" data-bs-toggle="modal" data-bs-target="#RateThreadModal"> Change your Rating </button>
+                                        
+                                        <button type="submit" class="btn btn-primary mx-auto gradient-rate-window"> Remove Rating </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    @{
+                        double ratingValue = Model.Ratings?.Any() == true ? Model.Ratings.Average(r => r.Value) : 0.0;
+                    }
+                    <span class="font-size-small gray-text" style="margin-right: 25px;"> Rating: @ratingValue.ToString("F1")</span>
+
+                    @* STARS *@
+
+                        <div class="rating-group rating__label">
+                            @{
+                                double roundedRating = Math.Round(ratingValue * 2) / 2;
+                                bool hasHalfStarValue = Math.Truncate(roundedRating) > 0;
+                                double endValue = roundedRating;
+                                bool isHalf = true;
+                                for (double i = 0.5; i <= 5; i += 0.5)
+                                {
+                                    if (isHalf)
+                                    {
+                                        if (i <= endValue)
+                                        {
+                                            <label class="rating__label rating__label--half"><i class="rating__icon rating__icon--star fa fa-star-half yellow-star"></i></label>
+                                        }
+                                        else
+                                        {
+                                            <label class="rating__label rating__label--half"><i class="rating__icon rating__icon--star fa fa-star-half white-star"></i></label>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (i <= endValue)
+                                        {
+                                            <label class="rating__label"><i class="rating__icon rating__icon--star fa fa-star yellow-star"></i></label>
+                                        }
+                                        else
+                                        {
+                                            <label class="rating__label"><i class="rating__icon rating__icon--star fa fa-star white-star"></i></label>
+                                        }
+                                    }
+                                    isHalf = !isHalf;
+                                }
+                            }
+                            <input class="rating__input" name="Rating" id="rating2-50" value="5" type="radio">
+                        </div>
+                   
+                </div>
+                
+            </div>
+
+        </div>
+    </div>
+
+
+    <br/>
+
+
+@* COMMENT LIST *@
+
+@{
+    if(Model.Comments.Count != 0)
+    {
+        foreach (var comment in Model.Comments)
+        {
+            string commenterAvatarLocation = avatarHelper.GetAvatar(comment.Author.Username);
+
+                <div class="bg-black text-light">
+                <div class="container-comment-details">
+
+                    <div class="box-thread-details--author">
+                        <img class="avatar" src="~/images/avatars/@commenterAvatarLocation" alt="avatar" />
+                        <br/>
+                        <a asp-controller="User" asp-action="Details" asp-route-id="@comment.AuthorId" class="link-light" style="text-decoration: none"><b>@comment.Author.Username</b></a>
+                        @{
+                            if (comment.Author.IsBlocked)
+                            {
+                                <div class="text-danger">Blocked</div>
+                            }
+                            else if (comment.Author.IsAdmin)
+                            {
+                                <div class="text-success">Admin</div>
+                            }
+                        }
+                    </div>
+
+                    <div class="box-thread-details--message" >
+                        <p class="card-text">@comment.Content</p>
+
+                        @if (comment.Edited == true){
+                            <span class="gray-text small-b-margin"> Last edit: @timeHelper.GetDelta(comment.EditDate)</span>
+                            <br/>
+                        }
+
+                            <span class="mb-1">@timeHelper.GetDelta(comment.CreationDate)</span>
+
+                        @* edit button *@
+
+                        @if (comment.AuthorId == Model.LoggedUserId)
+                        {
+                            <a class="btn btn-custom5" asp-controller="Thread" asp-action="EditComment" asp-route-id="@comment.Id">
+                                   <span class="gray-text px-2">Edit</span>
+                            </a>
+                        }
+
+                        @* delete comment button *@
+
+                        @if (AdminStatus == "True" || comment.AuthorId == Model.LoggedUserId)
+                        {
+                            <a class="btn btn-custom5" asp-controller="Thread" asp-action="DeleteComment" asp-route-id="@comment.Id">
+                                <span class="gray-text px-2">Delete</span>
+                            </a>
+                        }
+
+                    </div>
+
+                </div>
+            </div>
+
+        }
+    }
+    else
+    {
+        <div class="d-flex justify-content-center">
+                <div class="card bg-black text-bg-dark border-2 border-custom1 rounded-0 mb-3" style="width: 47rem;">
+                <div class="card-header text-danger">No comments!</div>
+                    <div class="card-body">
+                        <p class="card-text text-danger">Be the first to comment in <strong>@Model.Author.Username</strong>'s thread!</p>
+                    </div>
+            </div>
+        </div>
+    }
+}
+
+</div>
+
+<hr/>
+
+<script>
+    function closeAndOpenModals() {
+        // Close the first modal
+        $('#RemoveRatingModal').modal('hide');
+
+        // Disable keyboard navigation to prevent issues
+        $('#RemoveRatingModal').data('bs.modal')._config.keyboard = false;
+
+        // Dispose of the first modal
+        $('#RemoveRatingModal').modal('dispose');
+
+        // Show the second modal after the first modal is hidden
+        $('#RemoveRatingModal').on('hidden.bs.modal', function () {
+            $('#RateThreadModal').modal('show').off('hidden.bs.modal');
+        });
+    }
+</script>
