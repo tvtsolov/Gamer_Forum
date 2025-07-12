@@ -1,6 +1,6 @@
 <h1 style="text-align: center;">.NET Project "Forum-System" </h1>
 <p <p align="center">
-<img src=https://i.ibb.co/S3G4t8N/mushroom.png width="20%" height="100%"/>
+<img src=https://i.ibb.co/S3G4t8N/mushroom.png width="10%" height="100%"/>
 </p>
 
 ## Overview
